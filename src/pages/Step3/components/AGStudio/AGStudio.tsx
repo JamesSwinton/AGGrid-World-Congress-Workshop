@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import { AgStudio } from 'ag-studio-react';
 import { AgReportState, studioTheme } from 'ag-studio';
 import { useCO2Data } from '../../../../data/DataProvider';
-import { AgStudio } from 'ag-studio-react';
-import { studioTheme } from 'ag-studio';
 
 const myTheme = studioTheme.withParams({
   backgroundColor: '#0e0f13',
@@ -239,11 +237,6 @@ const initialState: AgReportState = {
     },
   },
 };
-
-const myTheme = studioTheme.withParams({
-  backgroundColor: '#0e0f13',
-  foregroundColor: '#e0e0e0',
-});
 
 export default function AGStudio() {
   const { rows, status } = useCO2Data();
