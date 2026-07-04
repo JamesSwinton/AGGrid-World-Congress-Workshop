@@ -98,7 +98,34 @@ Grid:
 - Pivoting
 - Integrated charts
 
-TODO: Prompt that clearly tells an LLM how to implement all of the advanced features into AG Grid and AG Charts, with references to documentation where relevant and a more detailed plan.
+Implement the advanced features using the following prompt. It references the
+reference implementation plan in
+[`docs/step2-implementation-plan.md`](docs/step2-implementation-plan.md), which
+breaks each feature down into a focused config snippet with a link to the
+relevant AG Grid / AG Charts docs:
+
+> Turn on the advanced AG Grid and AG Charts features in the Step 2 primitives,
+> following the plan in `docs/step2-implementation-plan.md`. Work through the
+> plan feature by feature, adding each snippet to the right place in the two
+> components (a key on the chart's `options`, a column def, a grid prop, or the
+> `onFirstDataRendered` handler), and verify each against the linked docs.
+>
+> Chart (`src/pages/Step2/components/AGCharts/AGCharts.tsx`): a secondary right
+> y-axis for World cumulative CO₂, a shared pointer-anchored tooltip, zoom
+> (scroll / drag-select / alt-pan), a navigator with mini chart, an x-axis
+> crosshair, and the right-click context menu (download as image).
+>
+> Grid (`src/pages/Step2/components/AGGrid/AGGrid.tsx`): row grouping (continent
+> → country) with the row-group panel, aggregations, set/date/number column
+> filters, the Columns/Filters side bar, a status bar, a pivot panel, cell
+> (range) selection, multi-row selection with a header checkbox, value
+> formatting, and an integrated treemap chart built via `createRangeChart` in
+> `onFirstDataRendered`.
+>
+> Read from `useCO2Data()` and leave `DataProvider` unchanged. Enterprise modules
+> are already registered in `src/main.tsx`. When you're done, run `npm run dev`,
+> open the Primatives page and drive each feature, then `npm run build` for a
+> clean typecheck.
 
 Hints & Best practices: todo
 
