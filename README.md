@@ -131,7 +131,49 @@ Hints & Best practices: todo
 
 ### Step 3
 
-Step 3 is an instructor led demo of AG Studio
+Step 3 is an instructor-led demo of **AG Studio** — the embedded analytics
+builder. Where Steps 1 and 2 hand you finished components, Studio hands the _end
+user_ a report builder: they drag fields onto a canvas and assemble grids,
+charts and dashboards themselves. The work is to describe the CO₂ dataset well
+and pass it to `<AgStudio>`.
+
+The prompt below builds the whole thing — the data wiring _and_ a finished
+dashboard that opens automatically — so the component ships working. In the
+session the instructor throws that report away and rebuilds it live from an empty
+canvas to demo how an end user assembles it. It references the reference
+implementation plan in
+[`docs/step3-implementation-plan.md`](docs/step3-implementation-plan.md), which
+covers the data-source/field definitions, theming, and the pre-built report:
+
+> Wire the CO₂ dataset into AG Studio in the Step 3 component and ship a pre-built
+> dashboard, following the plan in `docs/step3-implementation-plan.md`. Turn the
+> placeholder `src/pages/Step3/components/AGStudio/AGStudio.tsx` into a working
+> embedded analytics builder that opens on a finished report.
+>
+> Build an `AgDataSourcesDefinition` with a single in-memory
+> `AgSimpleDataSourceDefinition` (`id: 'emissions'`) whose `data` is `rows` from
+> `useCO2Data()` and whose `fields` give each column a name and a `format`
+> (`textFormat` for country/continent, `dateFormat` for date, `decimalFormat` /
+> `integerFormat` / `percentageFormat` for the numerics).
+>
+> Also build an `initialState` (`AgReportState`) with one `overview` page holding
+> four widgets — a `value` KPI of total CO₂, a `grid` of emissions by
+> continent/country, a `column-chart-grouped` of CO₂ by continent, and a
+> `line-chart` of CO₂ per capita over time — positioned via `widgetLayout` on the
+> 24-column grid. Field ids in each `dataMapping` must match the field ids above.
+>
+> Pass both to `<AgStudio>` along with `mode="edit"`, the dark
+> `studioTheme.withParams(...)`, `dataOptions={{ maxExportRows: -1 }}`, and an
+> `onStateUpdated` handler. Gate the mount on `status === 'ready'` so rows are
+> populated first.
+>
+> Read from `useCO2Data()` (use `rows` — countries only) and leave `DataProvider`
+> and `Studio.tsx` unchanged. No module registration is needed. When you're done,
+> run `npm run dev`, open the Studio page and confirm it opens on the pre-built
+> report and that dragging fields onto the canvas builds new widgets, then
+> `npm run build` for a clean typecheck.
+
+Hints & best practices: todo
 
 ## Solution
 
