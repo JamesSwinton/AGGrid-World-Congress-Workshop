@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { AgStudio } from 'ag-studio-react';
-import { studioTheme } from 'ag-studio';
+import { AgReportState, studioTheme } from 'ag-studio';
 import { useCO2Data } from '../../../../data/DataProvider';
 import { AgStudio } from 'ag-studio-react';
 import { studioTheme } from 'ag-studio';
@@ -10,7 +10,7 @@ const myTheme = studioTheme.withParams({
   foregroundColor: '#e0e0e0',
 });
 
-const initialState = {
+const initialState: AgReportState = {
   pages: [
     {
       id: 'page-1',
@@ -245,14 +245,6 @@ const myTheme = studioTheme.withParams({
   foregroundColor: '#e0e0e0',
 });
 
-/**
- * AG Studio — embedded analytics. We hand Studio the flat CO₂ rows as a single
- * data source; its data engine infers each field's type (country/continent →
- * category, date → temporal, the rest → numeric) and users build dashboards
- * (charts, grids, KPI tiles) on top via drag-and-drop.
- *
- * Runs unlicensed in development (watermark + console notice only).
- */
 export default function AGStudio() {
   const { rows, status } = useCO2Data();
 
@@ -265,8 +257,6 @@ export default function AGStudio() {
         {
           id: 'emissions',
           name: 'CO₂ emissions',
-          // Fields are inferred from the row shape; cast bridges the
-          // EmissionsRow interface to Studio's structural row type.
           data: rows as unknown as Record<
             string,
             string | number | Date | null
@@ -285,9 +275,9 @@ export default function AGStudio() {
     <AgStudio
       data={data}
       mode="edit"
-      onStateUpdated={(s) => console.log(s)}
-      initialState={initialState}
       theme={myTheme}
+      initialState={initialState}
+      onStateUpdated={(s) => console.log(s)}
       style={{ height: '100%', width: '100%' }}
     />
   );
