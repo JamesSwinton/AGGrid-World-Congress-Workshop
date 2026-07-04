@@ -4,7 +4,7 @@ Intro
 
 ## Overview
 
-4 steps: simple -> complex -> AG Grid / Charts -> Studio
+Extend a custom grid and chart component to see where it gets hard and flaky, then implement AG Grid/Charts to see the comparison.
 
 ## Setup
 
