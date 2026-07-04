@@ -38,7 +38,7 @@ export default function AGGrid() {
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <AgGridReact
-        rowData={rows}
+        // rowData={rows}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         theme={myTheme}

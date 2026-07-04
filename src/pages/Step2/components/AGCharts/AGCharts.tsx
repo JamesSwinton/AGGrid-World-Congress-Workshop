@@ -34,7 +34,7 @@ export default function AGCharts() {
       },
       series: selected.map((s) => ({
         type: 'line' as const,
-        data: s.data,
+        // data: s.data,
         xKey: 'date',
         yKey: 'co2_per_capita',
         yName: s.country,
