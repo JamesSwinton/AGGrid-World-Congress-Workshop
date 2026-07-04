@@ -221,6 +221,26 @@
   min-height: 0;
 }
 
+/* Toolbar buttons above the chart (export PNG, reset zoom). */
+.chart-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.chart-btn:hover {
+  background: var(--hover);
+  border-color: var(--accent);
+}
+
 /* Placeholder surfaces for the not-yet-implemented chart/grid components. */
 .chart-panel,
 .grid-panel {
