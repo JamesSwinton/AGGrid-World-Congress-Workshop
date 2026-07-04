@@ -37,6 +37,16 @@ function mapRows(raw: RawEmissionsRow[]): EmissionsRow[] {
 }
 
 /**
+ * True for actual countries, false for the dataset's aggregate entries
+ * (World, continents, EU-27, income groups, International transport, …).
+ * In the source data every aggregate has a null `continent` while every
+ * real country has one, so that single field is the discriminator.
+ */
+function isCountry(row: EmissionsRow): boolean {
+  return row.continent != null;
+}
+
+/**
  * Reshape flat rows into one series per country for charts. Keeps full rows
  * per point so a chart can pick any metric as its yKey without re-shaping.
  */
@@ -107,11 +117,13 @@ export function DataProvider({ children }: { children: ReactNode }) {
     };
   }, [activeId]);
 
+  // Grids show countries only; charts keep the full data (incl. aggregates).
+  const countryRows = useMemo(() => rows.filter(isCountry), [rows]);
   const chartData = useMemo(() => toChartData(rows), [rows]);
 
   const value = useMemo<DataContextValue>(
-    () => ({ rows, chartData, status, error, activeId, setActiveId }),
-    [rows, chartData, status, error, activeId],
+    () => ({ rows: countryRows, chartData, status, error, activeId, setActiveId }),
+    [countryRows, chartData, status, error, activeId],
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
