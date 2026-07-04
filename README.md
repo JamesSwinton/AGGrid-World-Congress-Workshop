@@ -72,7 +72,7 @@ const gridKey = import.meta.env.VITE_AG_GRID_LICENSE_KEY;
 const studioKey = import.meta.env.VITE_AG_STUDIO_LICENSE_KEY;
 
 if (gridKey) {
-  LicenseManager.setLicenseKey(gridKey);       // AG Grid + integrated charts
+  LicenseManager.setLicenseKey(gridKey); // AG Grid + integrated charts
   ChartsLicenseManager.setLicenseKey(gridKey); // standalone AG Charts (Step 2)
 }
 if (studioKey) AgStudioLicenseManager.setLicenseKey(studioKey); // AG Studio (Step 3)
@@ -215,8 +215,16 @@ Hints & best practices:
 
 ### Step 2
 
-Implement advanced AG Grid and AG Charts features:
-Charts:
+Now do the same thing with AG Grid and AG Charts and feel the difference: the features
+you fought with in Step 1 are mostly configuration flags here.
+
+You only need to touch two files (the enterprise modules are **already registered** for you
+in `src/main.tsx`, so there's no install/licensing step):
+
+- `src/pages/Step2/components/AGGrid/AGGrid.tsx`
+- `src/pages/Step2/components/AGCharts/AGCharts.tsx`
+
+Both get their data from the `useCO2Data()` hook (`src/data/DataProvider.tsx`):
 
 - Zooming,
 - Scrolling,
