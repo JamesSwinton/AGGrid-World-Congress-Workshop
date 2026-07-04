@@ -213,7 +213,7 @@
 
 .page-grid {
   flex: 1;
-  min-height: 0;
+  min-height: 500px;
 }
 
 .page-studio {
