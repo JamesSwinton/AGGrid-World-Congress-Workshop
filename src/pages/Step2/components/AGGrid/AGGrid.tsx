@@ -9,7 +9,11 @@ import {
 
 const myTheme = themeQuartz
   .withPart(iconSetMaterial)
-  .withPart(colorSchemeDarkBlue);
+  .withPart(colorSchemeDarkBlue)
+  .withParams({
+    backgroundColor: '#0e0f13',
+    headerBackgroundColor: '#16181d',
+  });
 
 const defaultColDef: ColDef = { flex: 1, minWidth: 100 };
 

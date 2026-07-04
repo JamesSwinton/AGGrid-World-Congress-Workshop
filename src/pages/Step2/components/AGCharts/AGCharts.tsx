@@ -25,7 +25,7 @@ export default function AGCharts() {
       },
       legend: { position: 'top-left' },
       theme: {
-        baseTheme: 'ag-default-dark',
+        baseTheme: 'ag-polychroma-dark',
         overrides: {
           common: {
             background: { fill: 'transparent' },
