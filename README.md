@@ -42,7 +42,7 @@ references the reference implementation plan in
 > you're done, run `npm run dev` and drive each feature to verify it works, then
 > `npm run build` for a clean typecheck.
 
-### Step 2
+### Step 1.1
 
 The components with basic functionality work well - let's introduce complexity.
 
@@ -72,7 +72,7 @@ Hints & best practices:
 
 TODO: Best practices for implementing features from scratch
 
-### Step 3
+### Step 2
 
 Implement advanced AG Grid and AG Charts features:
 Charts:
@@ -102,7 +102,7 @@ TODO: Prompt that clearly tells an LLM how to implement all of the advanced feat
 
 Hints & Best practices: todo
 
-### Step 4
+### Step 3
 
 Step 3 is an instructor led demo of AG Studio
 
