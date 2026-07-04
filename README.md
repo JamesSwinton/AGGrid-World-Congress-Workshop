@@ -39,7 +39,7 @@ Vite serves the app at http://localhost:5173. It opens on the **Custom** page
 (Step 1); switch pages from the sidebar and datasets from the toggle in the top
 bar. `npm run build` runs a full TypeScript typecheck + production build.
 
-### AG Grid / AG Charts Enterprise license
+### AG Grid / AG Charts / AG Studio license
 
 Steps 2 and 3 use Enterprise features (grouping, pivoting, integrated charts,
 Studio). They run out of the box in development — AG Grid logs a console
@@ -48,27 +48,38 @@ do the entire workshop without a key.
 
 To clear the watermark, grab a free trial key from
 [ag-grid.com/license-pricing](https://www.ag-grid.com/license-pricing/) and set
-it before the app renders. Drop it in a gitignored `.env.local` (already covered
-by `*.local` in `.gitignore`):
+it before the app renders. Each product registers **its own** license through its
+own manager — AG Grid and AG Charts share one Enterprise key, while **AG Studio
+is a separately-licensed product** and needs its own key. `src/main.tsx` already
+has an env-guarded registration block; just supply the keys via a gitignored
+`.env.local` (covered by `*.local` in `.gitignore`):
 
 ```bash
 # .env.local
-VITE_AG_GRID_LICENSE_KEY=your-trial-key
+VITE_AG_GRID_LICENSE_KEY=your-grid-and-charts-trial-key
+VITE_AG_STUDIO_LICENSE_KEY=your-studio-trial-key
 ```
 
-then register it at the top of `src/main.tsx`, _before_
+The registration itself lives at the top of `src/main.tsx`, before
 `ModuleRegistry.registerModules(...)`:
 
 ```ts
 import { LicenseManager } from 'ag-grid-enterprise';
-import { AgCharts } from 'ag-charts-enterprise';
+import { LicenseManager as ChartsLicenseManager } from 'ag-charts-enterprise';
+import { AgStudioLicenseManager } from 'ag-studio';
 
-const licenseKey = import.meta.env.VITE_AG_GRID_LICENSE_KEY;
-LicenseManager.setLicenseKey(licenseKey); // AG Grid + integrated charts
-AgCharts.setLicenseKey(licenseKey); // standalone AG Charts (Step 2)
+const gridKey = import.meta.env.VITE_AG_GRID_LICENSE_KEY;
+const studioKey = import.meta.env.VITE_AG_STUDIO_LICENSE_KEY;
+
+if (gridKey) {
+  LicenseManager.setLicenseKey(gridKey);       // AG Grid + integrated charts
+  ChartsLicenseManager.setLicenseKey(gridKey); // standalone AG Charts (Step 2)
+}
+if (studioKey) AgStudioLicenseManager.setLicenseKey(studioKey); // AG Studio (Step 3)
 ```
 
-The same trial key covers AG Grid Enterprise, AG Charts Enterprise, and AG Studio.
+Leaving either key unset just falls back to the trial watermark for that product,
+so the app still runs with no keys at all.
 
 ## Repo structure
 
