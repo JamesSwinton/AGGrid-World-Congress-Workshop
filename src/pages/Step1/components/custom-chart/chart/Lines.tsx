@@ -1,24 +1,30 @@
 import { linePath } from './path';
-import type { PlottedSeries, XScale, YScale } from './types';
+import type { SeriesDef, XScale, YScale } from './types';
 
 interface LinesProps {
-  series: PlottedSeries[];
+  series: SeriesDef[];
   x: XScale;
-  y: YScale;
+  yLeft: YScale;
+  yRight?: YScale;
 }
 
-export default function Lines({ series, x, y }: LinesProps) {
+export default function Lines({ series, x, yLeft, yRight }: LinesProps) {
   return (
     <g fill="none">
-      {series.map((s) => (
-        <path
-          key={s.country}
-          d={linePath(s.points, x, y)}
-          stroke={s.color}
-          strokeWidth={1.5}
-          vectorEffect="non-scaling-stroke"
-        />
-      ))}
+      {series.map((s) => {
+        if (s.hidden) return null;
+        const y = (s.axis ?? 'left') === 'right' && yRight ? yRight : yLeft;
+        return (
+          <path
+            key={s.id}
+            d={linePath(s.points, x, y)}
+            stroke={s.color}
+            strokeWidth={s.strokeWidth ?? 1.5}
+            strokeDasharray={s.dashed ? '5 4' : undefined}
+            vectorEffect="non-scaling-stroke"
+          />
+        );
+      })}
     </g>
   );
 }

@@ -265,6 +265,225 @@
   color: var(--text-muted);
 }
 
+/* ---- Custom chart ---- */
+.chart-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-legend-item {
+  cursor: pointer;
+}
+
+.chart-legend-item:focus {
+  outline: none;
+}
+
+.chart-legend-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 6px 9px;
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  transform: translate(-50%, calc(-100% - 12px));
+}
+
+.chart-tooltip-swatch {
+  width: 10px;
+  height: 10px;
+  margin-top: 2px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.chart-tooltip-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.chart-tooltip-meta {
+  color: var(--text-muted);
+}
+
+/* ---- Custom data grid ---- */
+.dg-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.dg-viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.dg-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface);
+}
+
+.dg-header-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.dg-th {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  overflow: hidden;
+}
+
+.dg-th--select {
+  justify-content: center;
+  padding: 0;
+  cursor: default;
+}
+
+.dg-th--dragover {
+  background: var(--accent-bg);
+}
+
+.dg-th-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dg-th-caret {
+  font-size: 9px;
+  opacity: 0.4;
+}
+
+.dg-th-caret--active {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.dg-th-resize {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+.dg-th-resize:hover {
+  background: var(--accent);
+  opacity: 0.35;
+}
+
+.dg-filter-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.dg-filter-lead {
+  flex-shrink: 0;
+}
+
+.dg-filter-cell {
+  flex-shrink: 0;
+  padding: 4px 6px;
+}
+
+.dg-filter-input {
+  width: 100%;
+  padding: 3px 6px;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--hover);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.dg-filter-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.dg-body {
+  position: relative;
+}
+
+.dg-row {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.dg-row:hover {
+  background: var(--hover);
+}
+
+.dg-row--selected {
+  background: var(--accent-bg);
+}
+
+.dg-cell {
+  flex-shrink: 0;
+  padding: 0 10px;
+  font-size: 13px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dg-cell--select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.dg-status {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+body.dg-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
 /* ---- Modal ---- */
 .modal-overlay {
   position: fixed;

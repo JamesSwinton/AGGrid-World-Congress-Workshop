@@ -1,12 +1,8 @@
 import { useMemo } from 'react';
 import { useCO2Data } from '../../../../data/DataProvider';
 import type { EmissionsRow } from '../../../../data/types';
-import Axes from './chart/Axes';
-import Lines from './chart/Lines';
-import Legend from './chart/Legend';
-import { dateExtent, linearScale, maxValue, timeScale } from './chart/scales';
-import type { PlottedSeries } from './chart/types';
-import { useElementSize } from './chart/useElementSize';
+import Chart from './chart/Chart';
+import type { ChartConfig, SeriesDef } from './chart/types';
 
 // Edit this list to change which countries are plotted (mirrors AGCharts).
 const COUNTRIES = [
@@ -19,66 +15,56 @@ const COUNTRIES = [
 const METRIC: keyof EmissionsRow = 'co2_per_capita';
 const COLORS = ['#5a8fd6', '#e15759', '#59a14f', '#f28e2b', '#b07aa1'];
 
-const MARGIN = { top: 40, right: 24, bottom: 40, left: 56 };
+// A single aggregate series shown against the secondary (right) axis. Its
+// magnitude dwarfs the per-capita lines, which is exactly why it needs its own
+// scale.
+const WORLD = 'World';
+const WORLD_COLOR = '#8a94a6';
 
 export default function CustomChart() {
-  const { chartData, status } = useCO2Data();
-  const [ref, { width, height }] = useElementSize();
+  const { chartData, rows, status } = useCO2Data();
 
-  const series = useMemo<PlottedSeries[]>(
-    () =>
-      COUNTRIES.map((country, i) => {
-        const source = chartData.find((s) => s.country === country);
-        const points = (source?.data ?? []).map((r) => ({
-          date: r.date,
-          value: r[METRIC] as number | null,
-        }));
-        return { country, color: COLORS[i % COLORS.length], points };
-      }),
-    [chartData],
-  );
+  const config = useMemo<ChartConfig>(() => {
+    const series: SeriesDef[] = COUNTRIES.map((country, i) => {
+      const source = chartData.find((s) => s.country === country);
+      const points = (source?.data ?? []).map((r) => ({
+        date: r.date,
+        value: r[METRIC] as number | null,
+      }));
+      return { id: country, name: country, color: COLORS[i % COLORS.length], points };
+    });
 
-  const innerWidth = width - MARGIN.left - MARGIN.right;
-  const innerHeight = height - MARGIN.top - MARGIN.bottom;
+    const world = chartData.find((s) => s.country === WORLD);
+    if (world) {
+      series.push({
+        id: WORLD,
+        name: 'World cumulative CO₂',
+        color: WORLD_COLOR,
+        axis: 'right',
+        dashed: true,
+        strokeWidth: 2,
+        points: world.data.map((r) => ({ date: r.date, value: r.cumulative_co2 })),
+      });
+    }
 
-  const { x, y, xDomain, yMax } = useMemo(() => {
-    const domain = dateExtent(series);
-    const top = maxValue(series);
     return {
-      x: timeScale(domain, innerWidth),
-      y: linearScale(top, innerHeight),
-      xDomain: domain,
-      yMax: top,
+      title: 'CO₂ emissions',
+      subtitle: `Per-capita emissions by country vs. world cumulative — ${chartData.length} countries, ${rows.length.toLocaleString()} rows.`,
+      series,
+      leftAxis: {
+        label: 'CO₂ per capita (t)',
+        format: (v) => `${v.toFixed(1)}`,
+      },
+      rightAxis: {
+        label: 'World cumulative CO₂ (Gt)',
+        format: (v) => `${(v / 1000).toFixed(0)}k`,
+      },
     };
-  }, [series, innerWidth, innerHeight]);
+  }, [chartData, rows.length]);
 
-  const ready = status === 'ready' && innerWidth > 0 && innerHeight > 0;
+  if (status !== 'ready') {
+    return <div className="chart-panel">Chart — {status}</div>;
+  }
 
-  return (
-    <div ref={ref} style={{ width: '100%', height: '100%' }}>
-      {ready ? (
-        <svg
-          width={width}
-          height={height}
-          role="img"
-          aria-label="CO₂ per capita by country"
-        >
-          <Legend series={series} x={MARGIN.left} y={22} />
-          <g transform={`translate(${MARGIN.left},${MARGIN.top})`}>
-            <Axes
-              x={x}
-              y={y}
-              xDomain={xDomain}
-              yMax={yMax}
-              innerWidth={innerWidth}
-              innerHeight={innerHeight}
-            />
-            <Lines series={series} x={x} y={y} />
-          </g>
-        </svg>
-      ) : (
-        <div className="chart-panel">Chart — {status}</div>
-      )}
-    </div>
-  );
+  return <Chart config={config} />;
 }

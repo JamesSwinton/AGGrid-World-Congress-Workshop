@@ -1,35 +1,48 @@
 import { ticks } from './scales';
-import type { XScale, YScale } from './types';
+import type { AxisDef, XScale, YScale } from './types';
 
 interface AxesProps {
   x: XScale;
-  y: YScale;
+  yLeft: YScale;
+  leftMax: number;
+  leftAxis?: AxisDef;
+  yRight?: YScale;
+  rightMax?: number;
+  rightAxis?: AxisDef;
   xDomain: [number, number];
-  yMax: number;
   innerWidth: number;
   innerHeight: number;
 }
 
-function formatValue(v: number): string {
-  return Math.abs(v) >= 10 ? v.toFixed(0) : v.toFixed(1);
+function defaultFormat(v: number): string {
+  const abs = Math.abs(v);
+  if (abs >= 1000) return v.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  return abs >= 10 ? v.toFixed(0) : v.toFixed(1);
 }
 
 export default function Axes({
   x,
-  y,
+  yLeft,
+  leftMax,
+  leftAxis,
+  yRight,
+  rightMax,
+  rightAxis,
   xDomain,
-  yMax,
   innerWidth,
   innerHeight,
 }: AxesProps) {
-  const yTicks = ticks(0, yMax, 5);
+  const leftTicks = ticks(0, leftMax, 5);
+  const rightTicks = yRight ? ticks(0, rightMax ?? 0, 5) : [];
   const xTicks = ticks(xDomain[0], xDomain[1], 6).map((ms) => new Date(ms));
+  const fmtLeft = leftAxis?.format ?? defaultFormat;
+  const fmtRight = rightAxis?.format ?? defaultFormat;
 
   return (
     <g>
-      {/* Horizontal gridlines + y labels */}
-      {yTicks.map((v) => (
-        <g key={v} transform={`translate(0,${y(v)})`}>
+      {/* Horizontal gridlines + left y labels */}
+      {leftTicks.map((v) => (
+        <g key={v} transform={`translate(0,${yLeft(v)})`}>
           <line
             x1={0}
             x2={innerWidth}
@@ -44,10 +57,50 @@ export default function Axes({
             fontSize={12}
             fill="var(--text-muted)"
           >
-            {formatValue(v)}
+            {fmtLeft(v)}
           </text>
         </g>
       ))}
+
+      {/* Right y labels (secondary axis) */}
+      {yRight &&
+        rightTicks.map((v) => (
+          <text
+            key={v}
+            x={innerWidth + 10}
+            y={yRight(v)}
+            dy="0.32em"
+            textAnchor="start"
+            fontSize={12}
+            fill="var(--text-muted)"
+          >
+            {fmtRight(v)}
+          </text>
+        ))}
+
+      {/* Left axis title */}
+      {leftAxis?.label && (
+        <text
+          transform={`translate(${-44},${innerHeight / 2}) rotate(-90)`}
+          textAnchor="middle"
+          fontSize={11}
+          fill="var(--text-muted)"
+        >
+          {leftAxis.label}
+        </text>
+      )}
+
+      {/* Right axis title */}
+      {yRight && rightAxis?.label && (
+        <text
+          transform={`translate(${innerWidth + 48},${innerHeight / 2}) rotate(90)`}
+          textAnchor="middle"
+          fontSize={11}
+          fill="var(--text-muted)"
+        >
+          {rightAxis.label}
+        </text>
+      )}
 
       {/* Baseline */}
       <line
