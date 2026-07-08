@@ -17,7 +17,7 @@ The starting app contains a basic SVG line chart and HTML table that renders a C
 The app contains a sidebar, which we'll use to separate the steps in the workshop:
 
 - **Custom** (Step 1) — a grid and chart written from scratch, no data libraries.
-- **Primatives** (Step 2) — the same features rebuilt on AG Grid and AG Charts.
+- **primitives** (Step 2) — the same features rebuilt on AG Grid and AG Charts.
 - **Studio** (Step 3) — A live demo of AG Studio embedded analytics.
 
 The app also contains a toolbar that allows you to select the granularity of the data to stress-test the components against various dataset sizes. The yearly dataset contains ~28k rows, and the monthly dataset contains ~300k rows.
@@ -91,7 +91,7 @@ public/data/           # the CO₂ dataset, one folder per granularity
   {decades,yearly,quarterly,monthly}/co2.json
 src/
   main.tsx             # entry — registers AG Grid/Charts enterprise modules
-  App.tsx              # routes: /custom, /primatives, /studio
+  App.tsx              # routes: /custom, /primitives, /studio
   index.css            # shared CSS variables (surface, border, accent, …)
   data/                # dataset registry + provider — the single source of data
     datasets.ts        # the four datasets and the default
@@ -102,7 +102,7 @@ src/
     Step1/             # "Custom" — from-scratch chart + grid
       components/custom-chart/   # inline-SVG chart built from primitives
       components/custom-grid/    # plain-DOM grid
-    Step2/             # "Primatives" — AGCharts + AGGrid components
+    Step2/             # "primitives" — AGCharts + AGGrid components
     Step3/             # "Studio" — AGStudio component
 docs/                  # the reference implementation plans (one per step)
 ```
@@ -118,7 +118,7 @@ The workshop runs in three stages, mirrored by the three sidebar pages:
 1. **Step 1 — Custom.** Turn skeleton components into a real grid and chart with a
    pre-built prompt, then (**Step 1.1**) pick further features to build _with AI,
    on your own_ — feeling where hand-rolling gets hard.
-2. **Step 2 — Primatives.** Rebuild the same advanced feature set on AG Grid and
+2. **Step 2 — primitives.** Rebuild the same advanced feature set on AG Grid and
    AG Charts and watch it collapse into configuration.
 3. **Step 3 — Studio.** An instructor-led demo of AG Studio, where the end user
    assembles reports themselves.
@@ -269,7 +269,7 @@ relevant AG Grid / AG Charts docs:
 >
 > Read from `useCO2Data()` and leave `DataProvider` unchanged. Enterprise modules
 > are already registered in `src/main.tsx`. When you're done, run `npm run dev`,
-> open the Primatives page and drive each feature, then `npm run build` for a
+> open the primitives page and drive each feature, then `npm run build` for a
 > clean typecheck.
 
 Hints & best practices:
@@ -354,7 +354,7 @@ finished result:
 | Branch                             | Stage                                                        |
 | ---------------------------------- | ------------------------------------------------------------ |
 | `step-1-core-features`             | Step 1 — the from-scratch chart & grid, features implemented |
-| `step-2-grid-&-charts-primatives`  | Step 2 — the AG Grid / AG Charts primitives                  |
+| `step-2-grid-&-charts-primitives`  | Step 2 — the AG Grid / AG Charts primitives                  |
 | `step-3-embedded-analytics-studio` | Step 3 — the AG Studio component                             |
 
 ```bash
