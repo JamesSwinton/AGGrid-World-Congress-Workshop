@@ -3,7 +3,7 @@ import Sidebar from './navigation/Sidebar';
 import Topbar from './navigation/Topbar';
 import { DataProvider } from './data/DataProvider';
 import Custom from './pages/Step1/Custom';
-import Primatives from './pages/Step2/Primatives';
+import Primitives from './pages/Step2/Primitives';
 import Studio from './pages/Step3/Studio';
 import './App.css';
 
@@ -18,7 +18,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/custom" replace />} />
               <Route path="/custom" element={<Custom />} />
-              <Route path="/primatives" element={<Primatives />} />
+              <Route path="/primitives" element={<Primitives />} />
               <Route path="/studio" element={<Studio />} />
             </Routes>
           </main>
