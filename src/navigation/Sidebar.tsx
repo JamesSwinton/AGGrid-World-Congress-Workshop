@@ -3,7 +3,7 @@ import { AgGridIcon, ColumnsIcon, DatabaseIcon, RocketIcon } from './icons';
 
 const navItems = [
   { label: 'Custom', to: '/custom', icon: RocketIcon },
-  { label: 'Primatives', to: '/primatives', icon: ColumnsIcon },
+  { label: 'Primitives', to: '/primitives', icon: ColumnsIcon },
   { label: 'Studio', to: '/studio', icon: DatabaseIcon },
 ];
 

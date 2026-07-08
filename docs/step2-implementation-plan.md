@@ -443,7 +443,7 @@ animateRows;
 
 ## Verification
 
-Run `npm run dev`, open the **Primatives** page, and confirm:
+Run `npm run dev`, open the **primitives** page, and confirm:
 
 - **Chart:** hover shows a shared tooltip; scroll/drag zooms and the navigator
   reflects it; right-click offers _Download_; the World series tracks the right
