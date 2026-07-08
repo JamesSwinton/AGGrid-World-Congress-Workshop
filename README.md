@@ -1,28 +1,34 @@
 # AG Grid World Congress Workshop Repo
 
-A hands-on workshop, built for the WeAreDevelopers World Congress, on the real
-cost of building data grids and charts from scratch — and how much of it
+A hands-on workshop, built for WeAreDevelopers World Congress, on the real
+cost of building data grids and charts from scratch, and how much of it
 disappears when you reach for AG Grid, AG Charts, and AG Studio.
 
-You start with deliberately basic, hand-rolled grid and chart components, use a
-pre-built prompt to bring them up to something that looks genuinely good, then
-work with AI on your own to push them further — until the seams start to show.
-From there you swap in AG Grid / AG Charts to feel the same features arrive as a
-few lines of config, and finish with AG Studio, where the _end user_ builds their
-own reports.
+A hands-on workshop, built for World Congress, from AG Grid. Designed to show the release cost of building data grids and charts from scratch, and where AG Grid and AG Charts can fit into AI workflows. We'll finish by showing a different approach: Embedded analytics, that let's you hand off the complexity of building dashboards to your users.
 
 ## Overview
 
-The app renders the same CO₂ emissions dataset three ways — one per workshop
-stage — switchable from the sidebar:
+In this workshop, you'll build a dashboard to visualise CO2 emissions across over 200 countries since 1750.
+
+### Starting app
+
+The starting app contains a basic SVG line chart and HTML table that renders a CO2 dataset, showing emissions from 1750 across 200+ countries.
+
+The app contains a sidebar, which we'll use to separate the steps in the workshop:
 
 - **Custom** (Step 1) — a grid and chart written from scratch, no data libraries.
 - **Primatives** (Step 2) — the same features rebuilt on AG Grid and AG Charts.
-- **Studio** (Step 3) — AG Studio, an embedded analytics builder.
+- **Studio** (Step 3) — A live demo of AG Studio embedded analytics.
 
-The arc is deliberate: extend the custom components until hand-rolling gets hard
-and flaky, see how little code the same features take with AG Grid / AG Charts,
-then hand report-building to the user with AG Studio.
+The app also contains a toolbar that allows you to select the granularity of the data to stress-test the components against various dataset sizes. The yearly dataset contains ~28k rows, and the monthly dataset contains ~300k rows.
+
+### Workshop flow
+
+You'll start with deliberately basic, hand-rolled grid and chart components, and then use a pre-written prompt and plan to bring them up to something that looks surprisingly good. We'll stop here to review what the AI has implemented, and discuss some best practices around these features, and where the AI may have deviated. You'll then have a chance to implement some more advanced features, working independently with an AI of your choice, to see how the codebase begins to bloat, and the complexity of managing these features compounds. If we have any volunteers, we'll take a look at some implementations and discuss them as a group.
+
+The second half of the workshop is focused on re-implementing these features using AG Grid and AG Charts - to see how 100's of lines of code can be reduced to just a few lines of config, to extract some more useful analysis from our data.
+
+Finally, we'll show you a live demo of a new approach: Embedded analytics, which lets you hand off the dashboard building process to your users instead.
 
 ## Setup
 
@@ -41,14 +47,11 @@ bar. `npm run build` runs a full TypeScript typecheck + production build.
 
 ### AG Grid / AG Charts / AG Studio license
 
-Steps 2 and 3 use Enterprise features (grouping, pivoting, integrated charts,
-Studio). They run out of the box in development — AG Grid logs a console
+Steps 2 and 3 use Enterprise features. They run out of the box in development — AG Grid logs a console
 watermark and the charts show a small overlay, but everything works, so you can
 do the entire workshop without a key.
 
-To clear the watermark, grab a free trial key from
-[ag-grid.com/license-pricing](https://www.ag-grid.com/license-pricing/) and set
-it before the app renders. Each product registers **its own** license through its
+To clear the watermark, grab an [AG Grid](https://www.ag-grid.com/data-grid/community-vs-enterprise/#request-a-30-day-enterprise-bundle-trial-licence) & [AG Studio](https://www.ag-grid.com/studio/license-pricing/?tab=trial) free trial key and set it before the app renders. Each product registers **its own** license through its
 own manager — AG Grid and AG Charts share one Enterprise key, while **AG Studio
 is a separately-licensed product** and needs its own key. `src/main.tsx` already
 has an env-guarded registration block; just supply the keys via a gitignored
@@ -72,7 +75,7 @@ const gridKey = import.meta.env.VITE_AG_GRID_LICENSE_KEY;
 const studioKey = import.meta.env.VITE_AG_STUDIO_LICENSE_KEY;
 
 if (gridKey) {
-  LicenseManager.setLicenseKey(gridKey);       // AG Grid + integrated charts
+  LicenseManager.setLicenseKey(gridKey); // AG Grid + integrated charts
   ChartsLicenseManager.setLicenseKey(gridKey); // standalone AG Charts (Step 2)
 }
 if (studioKey) AgStudioLicenseManager.setLicenseKey(studioKey); // AG Studio (Step 3)
@@ -158,17 +161,17 @@ references the reference implementation plan in
 > Read from `useCO2Data()` and reuse the CSS variables in `src/index.css`. When
 > you're done, run `npm run dev` and drive each feature to verify it works, then
 > `npm run build` for a clean typecheck.
+>
+> ** Do not use any 3rd party libraries or add any dependencies. All functionality should be bespoke**
 
 ### Step 1.1
 
 The components with basic functionality work well — now let's introduce
 complexity. This is the **self-guided** part: pick one or more features below and
-build them into the custom components _with AI_, on your own. Each is a real AG
-Grid / AG Charts feature you'll re-encounter (as config) in Step 2 — the point is
-to feel what it costs to hand-roll first.
+build them into the custom components _with AI_, on your own.
 
 Difficulty is rated for a **from-scratch** implementation (no libraries): 🟢 Easy
-(an afternoon-sized addition), 🟡 Medium (real geometry or state to manage), 🔴
+(a bite-sized addition), 🟡 Medium (real geometry or state to manage), 🔴
 Hard (a small subsystem of its own).
 
 **Chart** (`src/pages/Step1/components/custom-chart/`)
@@ -200,22 +203,23 @@ Hints & best practices:
 - **Keep it config-driven.** Add each feature as an option on the existing
   config, not a bespoke branch — the same discipline that keeps `CustomChart` /
   `CustomGrid` thin wrappers. If a feature forces a special case, that's a signal.
+
 - **Derive everything from the data domain.** Reuse the existing scale/geometry
   helpers (`scales.ts`, `path.ts`) rather than hardcoding pixel values, so
   zooming, panning and range buttons all fall out of changing one domain.
-- **Virtualize before you scale the data.** Row virtualization is the unlock that
-  lets the grid survive the larger datasets — build it before you stress-test
-  with the toggle, don't fight the crash.
+
 - **Let AI draft, but verify in the browser.** Drive each feature by hand on the
   largest dataset your components can handle, then resize the window — pointer
   math, event cleanup and stale closures are where from-scratch features get
   flaky, and they rarely show up in a quick glance at the code.
+
 - **Notice the cost.** Keep a mental tally of how much code and edge-case handling
-  each feature took. Step 2 turns most of them on in a line or two.
+  each feature took.
 
 ### Step 2
 
 Implement advanced AG Grid and AG Charts features:
+
 Charts:
 
 - Zooming,
@@ -274,9 +278,11 @@ Hints & best practices:
   [`docs/step2-implementation-plan.md`](docs/step2-implementation-plan.md) feature
   by feature — each snippet lists exactly where it goes (a chart `options` key, a
   column def, a grid prop, or `onFirstDataRendered`) and links the relevant doc.
+
 - **Compare the effort to Step 1.** The features you may have hand-rolled — zoom,
   navigator, tooltips, grouping, aggregation — are now a single option each.
   That contrast is the whole point of the stage.
+
 - **Read from the same `useCO2Data()`** and leave `DataProvider` untouched;
   Enterprise modules are already registered in `src/main.tsx`, so no module setup
   is needed.
